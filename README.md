@@ -1,7 +1,8 @@
 # Foxhole-SRPG
+Foxhole Simplified Region Path Generation
 This tool is used to generate a graph from a simplefied version of a region in foxhole.
 
-The program generate all datas used for create a graph. This can be used for getting the shortest path from a determinated point of a region to another point.
+The program generate all datas used for generate a graph. This can be used for getting the shortest path from a determinated point of a region to another point. Note that the program does not implement any search or anything else. This program only generate the data.
 
 The map use 2 different colors for moving in the maps and mark nodes:
     Red (255.0, 0.0, 0.0): The red is used only for marking a node. It must be 1 pixel. This mark where a node of the graph should be.
