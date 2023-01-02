@@ -10,5 +10,7 @@ public class PathGeneration {
         world.generateRegion();
 
         world.printLinkMap();
+
+        //world.generateAllWorld();
     }
 }
