@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ public class World {
     private List<Node> nodes = new ArrayList<>();
     private List<Link> links = new ArrayList<>();
     private BufferedImage image = null;
-    private String region;
+    private String region = null;
 
     private String pathMaps = "src/main/resources/maps/";
     private String pathGeneratedMaps = "src/main/resources/generated_maps/";
@@ -93,7 +92,7 @@ public class World {
      * @param region Region of the world
      */
     public void setRegion(String region) {
-        this.region = region.toUpperCase().replace(" ", "-");
+        this.region = normalizeRegion(region);
         File file = new File(pathMaps + this.region + ".png");
         try {
             image = ImageIO.read(file);
@@ -103,9 +102,31 @@ public class World {
         }
     }
 
-    public void generateWorld() {
+    public void generateRegion() {
         generation.parse();
         mergeLinks();
+    }
+
+    public void generateAllWorld() {
+        List<String> regions = new ArrayList<>();
+        File[] listOfFiles = new File(pathMaps).listFiles();
+
+        //get all the files name
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile()) {
+                System.out.println(listOfFiles[i].getName());
+                regions.add(listOfFiles[i].getName().toUpperCase().replace(".PNG", ""));
+            }
+        }
+
+        //after getting all the maps, it's time to generate all the maps
+        for (String reg: regions) {
+            setRegion(reg);
+            generation.parse();
+            mergeLinks();
+            printLinkMap();
+            clearWorld();
+        }
     }
     
     public void printNodes() {
@@ -187,6 +208,18 @@ public class World {
         catch (Exception e) {
             System.out.println("Unable to print image with links: " + e.getMessage());
         }
+    }
+
+    public String normalizeRegion(String region) {
+        return region.toUpperCase().replace(" ", "-");
+    }
+
+    public void clearWorld() {
+        nodes = new ArrayList<>();
+        links = new ArrayList<>();
+        image = null;
+        region = null;
+        generation = new WorldGeneration();
     }
 
 
